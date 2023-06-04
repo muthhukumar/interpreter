@@ -1,7 +1,5 @@
 import { isDigit, isLetter, isWhiteSpace } from "./utils";
-
-// TODO - use this instead of hard coding for end of file
-const EOF = "\0";
+import { EOF } from "./constants";
 
 export const Tokens = {
   Illegal: "ILLEGAL",
@@ -57,7 +55,7 @@ function createToken(tokenType: Token["type"], ch: Token["literal"]): Token {
   };
 }
 
-const keywords = {
+const Keywords = {
   fn: Tokens.Function,
   let: Tokens.Let,
   true: Tokens.True,
@@ -65,14 +63,14 @@ const keywords = {
   if: Tokens.If,
   else: Tokens.Else,
   return: Tokens.Return,
-};
+} as const;
 
 function lookUpIdent(word: string): Token["type"] {
-  if (!keywords[word]) {
+  if (!Keywords[word]) {
     return Tokens.Ident;
   }
 
-  return keywords[word];
+  return Keywords[word];
 }
 
 export class Tokenaizer {
@@ -88,7 +86,7 @@ export class Tokenaizer {
 
   readChar(): void {
     if (this.readPosition >= this.input.length) {
-      this.ch = "\0";
+      this.ch = EOF;
     } else {
       this.ch = this.input[this.readPosition];
     }
@@ -175,7 +173,7 @@ export class Tokenaizer {
         tok = createToken(Tokens.Minus, this.ch);
         break;
       }
-      case "\0": {
+      case EOF: {
         tok = createToken(Tokens.Eof, "eof");
         break;
       }
