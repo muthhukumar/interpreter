@@ -4,4 +4,4 @@ This repository contains an implementation of an interpreter in Rust and TypeScr
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE). Feel free to use and modify the code for your own purposes.
+This project is licensed under the [MIT License](LICENSE.txt). Feel free to use and modify the code for your own purposes.
