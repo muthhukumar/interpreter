@@ -43,7 +43,7 @@ export const Tokens = {
 
 type TokenType = (typeof Tokens)[keyof typeof Tokens];
 
-type Token = {
+export type Token = {
   type: TokenType;
   literal: string;
 };
@@ -73,7 +73,7 @@ function lookUpIdent(word: string): Token["type"] {
   return Keywords[word];
 }
 
-export class Tokenaizer {
+export class Lexer {
   private position: number = 0;
   private readPosition: number = 0;
   private ch!: string;
@@ -98,7 +98,7 @@ export class Tokenaizer {
   nextToken(): Token {
     let tok: Token | undefined;
 
-    this.skipWhiteSpce();
+    this.skipWhiteSpace();
 
     switch (this.ch) {
       case "=": {
@@ -217,7 +217,7 @@ export class Tokenaizer {
     return this.input.slice(position, this.position);
   }
 
-  skipWhiteSpce() {
+  skipWhiteSpace() {
     while (isWhiteSpace(this.ch)) {
       this.readChar();
     }

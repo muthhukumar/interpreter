@@ -1,4 +1,4 @@
-import { Tokenaizer, Tokens } from "..";
+import { Lexer, Tokens } from "..";
 
 describe("test getNextToken()", () => {
   const input = `=+(){},;`;
@@ -14,7 +14,7 @@ describe("test getNextToken()", () => {
     Tokens.SemiColon,
   ];
 
-  const tokenaizer = new Tokenaizer(input);
+  const tokenaizer = new Lexer(input);
 
   for (const token of tokens) {
     const tokenType = tokenaizer.nextToken().type;
@@ -123,7 +123,7 @@ if (5 < 10) {
     Tokens.Eof,
   ];
 
-  let tokenaizer = new Tokenaizer(input);
+  let tokenaizer = new Lexer(input);
 
   for (const token of tokens) {
     const nextToken = tokenaizer.nextToken();
