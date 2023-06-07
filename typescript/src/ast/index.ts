@@ -16,6 +16,11 @@ class Identifier implements Expression {
   token: Token;
   value: string;
 
+  constructor({ token, value }: { token: Token; value: string }) {
+    this.token = token;
+    this.value = value;
+  }
+
   expressionNode() {}
 
   tokenLiteral(): string {
@@ -27,6 +32,10 @@ class LetStatement implements Statement {
   token: Token;
   name: Identifier;
   value: Expression;
+
+  constructor({ token }: { token: Token }) {
+    this.token = token;
+  }
 
   statementNode() {}
 
@@ -46,5 +55,7 @@ class Program implements AstNode {
     return "";
   }
 }
+
+export type { Statement };
 
 export { Program, Identifier, LetStatement };

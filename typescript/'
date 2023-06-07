@@ -73,7 +73,7 @@ function lookUpIdent(word: string): Token["type"] {
   return Keywords[word];
 }
 
-class Lexer {
+export class Lexer {
   private position: number = 0;
   private readPosition: number = 0;
   private ch!: string;
@@ -231,5 +231,3 @@ class Lexer {
     return this.input[this.readPosition];
   }
 }
-
-export { Tokens, type TokenType, Lexer, type Token };

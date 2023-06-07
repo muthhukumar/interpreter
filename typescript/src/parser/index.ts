@@ -1,30 +1,5 @@
-// type Parser struct {
-//     l *lexer.Lexer
-//
-//     curToken  token.Token
-//     peekToken token.Token
-// }
-//
-// func New(l *lexer.Lexer) *Parser {
-//     p := &Parser{l: l}
-//
-//     // Read two tokens, so curToken and peekToken are both set
-//     p.nextToken()
-//     p.nextToken()
-//
-//     return p
-// }
-//
-// func (p *Parser) nextToken() {
-//     p.curToken = p.peekToken
-//     p.peekToken = p.l.NextToken()
-// }
-//
-// func (p *Parser) ParseProgram() *ast.Program {
-//     return nil
-
-import { Program } from "../ast";
-import { Lexer, Token } from "../lexer";
+import { Identifier, LetStatement, Program, Statement } from "../ast";
+import { Lexer, Token, TokenType, Tokens } from "../lexer";
 
 class Parser {
   l: Lexer;
@@ -43,8 +18,73 @@ class Parser {
     this.peekToken = this.l.nextToken();
   }
 
-  parseProgram(): Program | null {
-    // TODO
-    return null;
+  parseLetStatement(): Statement | null {
+    const statement = new LetStatement({ token: this.curToken });
+
+    if (!this.expectPeek(Tokens.Ident)) {
+      return null;
+    }
+
+    statement.name = new Identifier({
+      token: this.curToken,
+      value: this.curToken.literal,
+    });
+
+    if (!this.expectPeek(Tokens.Assign)) {
+      return null;
+    }
+
+    // For now skipping the expression till we encounter the semicolon
+    while (!this.curTokenIs(Tokens.SemiColon)) {
+      this.nextToken();
+    }
+
+    return statement;
+  }
+
+  curTokenIs(t: TokenType): boolean {
+    return this.curToken.type === t;
+  }
+
+  peekTokenIs(t: TokenType): boolean {
+    return this.peekToken.type === t;
+  }
+
+  expectPeek(t: TokenType): boolean {
+    if (this.peekTokenIs(t)) {
+      this.nextToken();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  parseStatement(): Statement | null {
+    switch (this.curToken.type) {
+      case Tokens.Let: {
+        return this.parseLetStatement();
+      }
+      default: {
+        return null;
+      }
+    }
+  }
+
+  parseProgram(): Program {
+    const program = new Program();
+
+    while (this.curToken.type !== Tokens.Eof) {
+      const statement = this.parseStatement();
+
+      if (statement) {
+        program.statements = program.statements.concat(statement);
+      }
+
+      this.nextToken();
+    }
+
+    return program;
   }
 }
+
+export { Parser };
