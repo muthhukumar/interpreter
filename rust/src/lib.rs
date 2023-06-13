@@ -1,9 +1,10 @@
 pub mod ast;
 pub mod lexer;
+pub mod parser;
 
 #[cfg(test)]
-mod test {
-    use super::lexer::{Token, Tokenaizer};
+mod lexer_test {
+    use super::lexer::{Lexer, Token};
 
     #[test]
     fn test_operators() {
@@ -20,7 +21,7 @@ mod test {
             Token::SemiColon,
         ];
 
-        let mut tokenaizer = Tokenaizer::new(input);
+        let mut tokenaizer = Lexer::new(input);
 
         for token in tokens {
             let next_token = tokenaizer.next_token();
@@ -132,7 +133,7 @@ if (5 < 10) {
             Token::Eof,
         ];
 
-        let mut tokenaizer = Tokenaizer::new(input);
+        let mut tokenaizer = Lexer::new(input);
 
         for token in tokens {
             let next_token = tokenaizer.next_token();
@@ -140,5 +141,26 @@ if (5 < 10) {
 
             assert_eq!(token, next_token, "{}", message);
         }
+    }
+}
+
+#[cfg(test)]
+mod parser_test {
+    use super::parser::Parser;
+
+    use super::lexer::Lexer;
+
+    #[test]
+    fn parser_let_statement() {
+        let input = "let x = 5;
+let y = 10;
+let foobar = 838383;"
+            .to_string();
+
+        let lexer = Lexer::new(input);
+
+        let parser = Parser::new(lexer);
+
+        // let program = parser.
     }
 }

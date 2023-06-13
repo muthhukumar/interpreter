@@ -1,6 +1,6 @@
 const EOF: u8 = 0;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     Illegal,
     Eof,
@@ -42,7 +42,7 @@ pub enum Token {
 }
 
 #[derive(Debug)]
-pub struct Tokenaizer {
+pub struct Lexer {
     position: usize,
     read_position: usize,
     ch: u8,
@@ -62,9 +62,9 @@ pub fn look_up_ident(unknown_ident: &str) -> Token {
     }
 }
 
-impl Tokenaizer {
-    pub fn new(input: String) -> Tokenaizer {
-        let mut tokenaizer = Tokenaizer {
+impl Lexer {
+    pub fn new(input: String) -> Lexer {
+        let mut tokenaizer = Lexer {
             position: 0,
             read_position: 0,
             ch: 0,
